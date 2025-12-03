@@ -23,7 +23,22 @@ public class UserController {
     // User info/profile page (logged-in users only)
     @GetMapping("/profile/{id}")
     public String userProfile(@PathVariable("id") Long id, Model model) {
+        // Only allow the profile owner to view this page
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+            return "redirect:/login";
+        }
+
         var user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        // If the authenticated user is not the owner, redirect to the authenticated user's profile or login
+        if (!user.getUsername().equals(auth.getName())) {
+            var current = userRepository.findByUsername(auth.getName());
+            if (current.isPresent()) {
+                return "redirect:/profile/" + current.get().getUserId();
+            }
+            return "redirect:/login";
+        }
+
         // Initialize collections to avoid lazy-loading issues in the view
         if (user.getCreatedRecipes() != null) user.getCreatedRecipes().size();
         if (user.getFavorites() != null) user.getFavorites().size();
@@ -34,15 +49,28 @@ public class UserController {
     // Show form to edit user profile (logged-in users only)
     @GetMapping("/profile/{id}/edit")
     public String editUserProfileForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id)));
+        // Only allow the profile owner to open the edit form
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+            return "redirect:/login";
+        }
+        var user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        if (!user.getUsername().equals(auth.getName())) {
+            var current = userRepository.findByUsername(auth.getName());
+            if (current.isPresent()) {
+                return "redirect:/profile/" + current.get().getUserId();
+            }
+            return "redirect:/login";
+        }
+        model.addAttribute("user", user);
         return "editProfile";
     }
 
     // Update user profile (logged-in users only)
     @PostMapping("/profile/{id}/edit")
     public String editUserProfile(@PathVariable("id") Long id, User updatedUser) {
-        // Only allow the owner of the profile or an admin to update
-        if (!isAdminOrOwner(id)) {
+        // Only allow the owner of the profile to update (not other users)
+        if (!isOwner(id)) {
             return "redirect:/login";
         }
         updatedUser.setUserId(id);
@@ -50,17 +78,12 @@ public class UserController {
         return "redirect:/profile/{id}";
     }
 
-    // Helper: returns true if current user is admin or owner of resource
-    private boolean isAdminOrOwner(Long userId) {
+    // Helper: returns true if current user is the owner of the resource
+    private boolean isOwner(Long userId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             return false;
         }
-        // Admin check
-        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            return true;
-        }
-        // Owner check by username
         String currentUsername = auth.getName();
         return userRepository.findById(userId).map(u -> u.getUsername().equals(currentUsername)).orElse(false);
     }

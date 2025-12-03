@@ -151,3 +151,16 @@ main { flex: 1 0 auto; }
 .heart-inline .heart-btn:focus { outline: none; box-shadow: none; }
 .heart-inline .heart-btn:hover { transform: scale(1.05); }
 .heart-inline .heart-btn span { text-decoration: none; }
+
+/* Prominent Add Recipe button */
+.btn-add-recipe {
+	font-size: 1.05rem;
+	padding: 0.5rem 1.0rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 6px 16px rgba(139,94,60,0.12);
+}
+
+@media (max-width: 575.98px) {
+	/* Make the add button full width on very small screens */
+	.btn-add-recipe { display: inline-block; width: 100%; text-align: center; }
+}
