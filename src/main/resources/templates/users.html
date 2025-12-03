@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.users}">Manage Users</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--Users management page-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <h2 class="mb-4" th:text="#{users.heading.manageUsers}">Manage Users</h2>
+        <div class="table-responsive main-card">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th th:text="#{table.header.username}">Username</th>
+                        <th th:text="#{table.header.email}">Email</th>
+                        <th th:text="#{table.header.role}">Role</th>
+                        <th th:text="#{table.header.actions}">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.username}">Username</td>
+                        <td th:text="${user.email}">Email</td>
+                        <td th:text="${user.role}">Role</td>
+                        <td>
+                                <form th:action="@{/admin/users/{id}/delete(id=${user.userId})}" method="post" style="display:inline" th:attr="data-confirm=#{confirm.deleteUser}" onsubmit="return confirm(this.dataset.confirm);">
+                                    <button class="btn btn-sm btn-danger" type="submit" th:text="#{button.delete}">Delete</button>
+                                </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>

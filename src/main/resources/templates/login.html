@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.login}">FlavorStory - Login</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--Login page-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="main-card">
+                    <h2 class="mb-3" th:text="#{login.heading}">Login to Your Account</h2>
+                    <!--User is taken to login page if trying to add a recipe without being logged in-->
+                    <div th:if="${param.loginRequired}" class="alert alert-warning" role="alert" th:text="#{login.loginRequired}">
+                        You must be logged in to add a recipe. Please log in or register first.
+                    </div>
+                    <!--Error message for invalid login-->
+                    <div th:if="${param.error}" class="alert alert-danger" role="alert" th:text="#{login.invalid}">
+                        Invalid username or password. Please try again.
+                    </div>
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label" th:text="#{label.username}">Username</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label" th:text="#{label.password}">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary" th:text="#{button.login}">Login</button>
+                        </div>
+                    </form>
+                    <div class="mt-3 text-center">
+                        <p class="mb-0"><span th:text="#{new.here}">New here?</span> <a th:href="@{/register}" class="fw-bold brand-link" th:text="#{link.createAccount}">Create an account</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>

@@ -1,0 +1,153 @@
+:root {
+	--brand: #8B5E3C; /* warm brown */
+	--brand-contrast: #F5F0E6; /* light beige */
+	--brand-dark: #6B4B2A;
+	--muted: #6c757d;
+}
+
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; min-height: 100vh; background: #f8f9fb; color: #343a40; }
+main { flex: 1 0 auto; }
+.main-card { background: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 1.25rem; }
+.header-brand { font-weight: 700; letter-spacing: .5px; color: var(--brand-dark); }
+.logo-img { height: 100px; }
+.form-label { font-weight: 600; }
+.site-navbar { background: linear-gradient(90deg, var(--brand) 0%, var(--brand-contrast) 100%); }
+.site-navbar .navbar-nav.me-auto .nav-link { color: rgb(255, 255, 255); font-weight: 600; }
+.site-navbar .navbar-nav.me-auto .nav-link:hover { color: #fff; text-decoration: underline; }
+.site-navbar .navbar-brand { color: #fff; }
+/* right-side (auth) links: dark color for contrast on light/right side of gradient */
+.site-navbar .navbar-nav.ms-auto .nav-link { color: var(--brand-dark); font-weight: 600; }
+.site-navbar .navbar-nav.ms-auto .nav-link:hover { color: #52361f; text-decoration: underline; }
+.navbar-toggler { border-color: rgba(0,0,0,0.08); }
+/* Make the toggler icon darker so it isn't lost on the gradient */
+.navbar-dark .navbar-toggler-icon {
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='%2352361f' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+}
+
+/* allow absolute positioning for collapsed menu inside navbar container */
+.site-navbar .container { position: relative; }
+
+/* Collapsed hamburger menu: show as a separate boxed list on small screens */
+@media (max-width: 991.98px) {
+	.site-navbar .collapse.navbar-collapse.show {
+		position: absolute;
+		top: 100%;
+		right: 1rem;
+		left: 1rem;
+		background: var(--brand-contrast);
+		border-radius: 8px;
+		box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+		padding: 0.25rem 0;
+		z-index: 1050;
+	}
+
+	.site-navbar .navbar-nav {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.site-navbar .navbar-nav .nav-item { margin: 0; }
+
+	.site-navbar .navbar-nav .nav-link {
+		color: var(--brand-dark);
+		padding: 0.65rem 1rem;
+		text-align: center;
+	}
+
+	.site-navbar .navbar-nav .nav-link:hover { background: rgba(0,0,0,0.03); }
+
+	.site-navbar .navbar-nav .nav-item form { display: block; padding: 0.25rem 1rem; }
+	.site-navbar .navbar-nav .nav-item form .btn { display: block; width: 100%; text-align: left; padding: 0; }
+
+	/* Darken main links inside the collapsed panel so they stand out on light background */
+	.site-navbar .collapse.navbar-collapse.show .navbar-nav.me-auto .nav-link {
+		color: var(--brand-dark);
+		font-weight: 700;
+	}
+
+	/* Separate auth links (right-side) visually inside the collapsed panel */
+	.site-navbar .collapse.navbar-collapse.show .navbar-nav.ms-auto {
+		border-top: 1px solid rgba(0,0,0,0.06);
+		margin-top: 0.5rem;
+		padding-top: 0.5rem;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	/* Ensure logout/form buttons appear centered and full width in the panel */
+	.site-navbar .collapse.navbar-collapse.show .navbar-nav.ms-auto .nav-item form {
+		display: block;
+		padding: 0.25rem 1rem;
+		width: 100%;
+	}
+	.site-navbar .collapse.navbar-collapse.show .navbar-nav.ms-auto .nav-item form .btn-link {
+		width: 100%;
+		text-align: center;
+	}
+}
+.site-footer { background: #faf6f2; border-top: 1px solid rgba(0,0,0,0.06); }
+.site-footer .text-muted { color: var(--muted); }
+.btn-primary { background-color: var(--brand); border-color: var(--brand); }
+.btn-primary:hover { background-color: var(--brand-dark); border-color: var(--brand-dark); }
+.card-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 0.8rem 0; }
+.small-muted { color: var(--muted); }
+
+.input-group textarea.form-control { resize: vertical; }
+
+/* Selective brand link style. Apply to anchors where brown is desired via the `brand-link` class */
+.brand-link, .brand-link:link {
+	color: var(--brand);
+	text-decoration: none;
+}
+.brand-link:visited {
+	color: var(--brand);
+}
+.brand-link:hover, .brand-link:focus {
+	color: var(--brand-dark);
+	text-decoration: underline;
+}
+
+/* Brown-themed alert for empty category / info messages */
+.alert-brand {
+	background-color: var(--brand-contrast);
+	border: 1px solid rgba(107,75,42,0.12);
+	border-left: 4px solid var(--brand);
+}
+
+/* Recipe card favorite heart */
+.recipe-card { position: relative; }
+.recipe-heart { position: absolute; top: 10px; right: 12px; z-index: 5; }
+.recipe-heart .heart-btn {
+	background: transparent;
+	border: none;
+	padding: 0.15rem;
+	font-size: 1.6rem;
+	line-height: 1;
+	cursor: pointer;
+	text-decoration: none; /* remove underline */
+	color: inherit;
+}
+.recipe-heart .heart-btn:focus { outline: none; box-shadow: none; }
+.recipe-heart .heart-btn:hover { transform: scale(1.05); }
+
+/* Ensure the heart's default link styles (if any) don't show */
+.recipe-heart .heart-btn span { text-decoration: none; }
+
+/* Inline heart used next to recipe title */
+.heart-inline { display: inline-flex; align-items: center; }
+.heart-inline .heart-btn {
+	background: transparent;
+	border: none;
+	padding: 0.05rem 0.25rem;
+	font-size: 1.6rem;
+	line-height: 1;
+	cursor: pointer;
+	text-decoration: none;
+	color: inherit;
+}
+.heart-inline .heart-btn:focus { outline: none; box-shadow: none; }
+.heart-inline .heart-btn:hover { transform: scale(1.05); }
+.heart-inline .heart-btn span { text-decoration: none; }

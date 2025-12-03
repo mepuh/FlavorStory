@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.contact}">Contact - FlavorStory</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--Contact page-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <div class="main-card">
+            <h1 class="mb-3" th:text="#{contact.heading}">Contact Us</h1>
+
+            <div th:if="${param.success}">
+                <div class="alert alert-success" th:text="#{contact.success}">Thank you — your message has been received.</div>
+            </div>
+
+            <p class="small-muted"><span th:text="#{contact.intro}">Have a question, feedback, or want to contribute recipes? Send us a message using the form below or email us at</span> <a class="brand-link" href="mailto:hello@flavorstory.com">hello@flavorstory.com</a>.</p>
+            <form th:action="@{/contact}" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label" th:text="#{label.yourName}">Your name</label>
+                    <input type="text" id="name" name="name" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label" th:text="#{label.email}">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label" th:text="#{label.message}">Message</label>
+                    <textarea id="message" name="message" class="form-control" rows="6" required></textarea>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary" type="submit" th:text="#{button.sendMessage}">Send Message</button>
+                </div>
+            </form>
+
+            <hr />
+            <h5 class="mt-4">Other ways to reach us</h5>
+            <ul>
+                <li>Phone: <a class="brand-link" href="tel:+1234567890">+358 123 456789</a></li>
+                <li>Address: Esimerkkikatu 1, Helsinki, 00100 Finland</li>
+            </ul>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>

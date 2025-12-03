@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.newRecipe}">FlavorStory - New Recipe</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--New recipe creation page-->
+
+<body th:attr="data-remove-text=#{button.remove}, data-add-ingredient-text=#{placeholder.addIngredient}, data-add-step-text=#{placeholder.addStep}">
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="main-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="mb-0" th:text="#{newRecipe.heading}">Add New Recipe</h2>
+                        <a class="btn btn-outline-secondary" th:href="@{/recipes}" th:text="#{button.backToRecipes}">Back to Recipes</a>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                    <form th:action="@{/recipes}" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label" th:text="#{label.title}">Title</label>
+                            <input type="text" id="title" name="title" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label" th:text="#{label.shortDescription}">Short description</label>
+                            <textarea id="description" name="description" class="form-control" rows="3"
+                                required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="preparationTime" class="form-label" th:text="#{label.preparationTime}">Preparation Time</label>
+                                <input type="text" id="preparationTime" name="preparationTime" class="form-control"
+                                    required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label" th:text="#{label.category}">Category</label>
+                                <select id="category" name="category.categoryId" class="form-select" required>
+                                    <option th:each="category : ${categories}" th:value="${category.categoryId}"
+                                        th:text="${category.name}">Category Name</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{label.ingredients}">Ingredients</label>
+                            <!--Ingredients input fields-->
+                            <div id="ingredientsContainer">
+                                <div class="input-group mb-2">
+                                    <textarea name="ingredients" class="form-control" rows="1"
+                                        th:placeholder="#{placeholder.addIngredient}" required></textarea>
+                                    <button type="button" class="btn btn-outline-danger ms-2 remove-field-btn"
+                                        onclick="removeField(this)" th:text="#{button.remove}">Remove</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="addIngredient()" th:text="#{button.addIngredient}">Add ingredient</button>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{label.instructions}">Instructions</label>
+                            <!--Instructions input fields-->
+                            <div id="instructionsContainer">
+                                <div class="input-group mb-2">
+                                    <textarea name="instructions" class="form-control" rows="2" th:placeholder="#{placeholder.addStep}"
+                                        required></textarea>
+                                    <button type="button" class="btn btn-outline-danger ms-2 remove-field-btn"
+                                        onclick="removeField(this)" th:text="#{button.remove}">Remove</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="addInstruction()" th:text="#{button.addStep}">Add step</button>
+                        </div>
+                        <div class="mb-3">
+                            <label for="story" class="form-label" th:text="#{label.story}">Story (optional)</label>
+                            <textarea id="story" name="story" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <input type="hidden" name="createdAt"
+                            th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary" th:text="#{button.addRecipe}">Add Recipe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+
+    <script>
+        // Update visibility of remove buttons based on number of fields, no remove button if only one field
+        function updateRemoveButtons() {
+            ['ingredientsContainer', 'instructionsContainer'].forEach(id => {
+                const container = document.getElementById(id);
+                if (!container) return;
+                const groups = container.querySelectorAll('.input-group');
+                const buttons = container.querySelectorAll('.remove-field-btn');
+                if (groups.length <= 1) {
+                    buttons.forEach(b => b.style.display = 'none');
+                } else {
+                    buttons.forEach(b => b.style.display = '');
+                }
+            });
+        }
+
+        // Add a new ingredient input field
+        function addIngredient(value) {
+            const container = document.getElementById('ingredientsContainer');
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2';
+
+            const ta = document.createElement('textarea');
+            ta.name = 'ingredients';
+            ta.className = 'form-control';
+            ta.rows = 1;
+            // Use page-level data attributes for localized placeholder text
+            ta.placeholder = document.body.dataset.addIngredientText || 'Add ingredient';
+            if (value) ta.value = value;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-outline-danger ms-2 remove-field-btn';
+            btn.textContent = document.body.dataset.removeText || 'Remove';
+            btn.onclick = function () { removeField(btn); };
+
+            div.appendChild(ta);
+            div.appendChild(btn);
+            container.appendChild(div);
+            updateRemoveButtons();
+        }
+
+        // Add a new instruction input field
+        function addInstruction(value) {
+            const container = document.getElementById('instructionsContainer');
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2';
+
+            const ta = document.createElement('textarea');
+            ta.name = 'instructions';
+            ta.className = 'form-control';
+            ta.rows = 2;
+            ta.placeholder = document.body.dataset.addStepText || 'Add step';
+            if (value) ta.value = value;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-outline-danger ms-2 remove-field-btn';
+            btn.textContent = document.body.dataset.removeText || 'Remove';
+            btn.onclick = function () { removeField(btn); };
+
+            div.appendChild(ta);
+            div.appendChild(btn);
+            container.appendChild(div);
+            updateRemoveButtons();
+        }
+
+        // Remove an input field
+        function removeField(btn) {
+            const group = btn.closest('.input-group');
+            if (group) group.remove();
+            updateRemoveButtons();
+        }
+
+        // Initialize remove buttons on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            updateRemoveButtons();
+        });
+    </script>
+
+</body>
+
+</html>

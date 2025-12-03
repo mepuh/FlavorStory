@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.newCategory}">Add Category</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--New category creation page (admin only)-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <div class="main-card">
+            <h2 class="mb-3">Add New Category</h2>
+            <form th:action="@{/admin/categories/new}" method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Category Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required />
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary" type="submit">Add Category</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>

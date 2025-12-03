@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.adminRecipes}">Admin - Manage Recipes</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--Admin recipe management page-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <h2 class="mb-4" th:text="#{admin.heading.manageRecipes}">Manage Recipes</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th th:text="#{table.header.title}">Title</th>
+                        <th th:text="#{table.header.category}">Category</th>
+                        <th th:text="#{table.header.creator}">Creator</th>
+                        <th th:text="#{table.header.actions}">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="recipe : ${recipes}">
+                        <td th:text="${recipe.title}">Recipe Title</td>
+                        <td th:text="${recipe.category.name}">Category Name</td>
+                        <td th:text="${recipe.creator.username}">Creator</td>
+                        <td>
+                            <a th:href="@{/recipes/{id}/edit(id=${recipe.recipeId})}" class="btn btn-sm btn-outline-secondary me-2" th:text="#{button.edit}">Edit</a>
+                            <form th:action="@{/admin/recipes/{id}/delete(id=${recipe.recipeId})}" method="post" style="display:inline"
+                                  th:attr="data-confirm=#{confirm.deleteRecipe}" onsubmit="return confirm(this.dataset.confirm);">
+                                <button class="btn btn-sm btn-danger" type="submit" th:text="#{button.delete}">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>

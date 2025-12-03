@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.home}">FlavorStory - Home</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--Homepage-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="main-card">
+                    <h1 class="card-title" th:text="#{welcome.title}">Welcome to FlavorStory!</h1>
+                    <p class="small-muted" th:text="#{welcome.tagline}">Discover and share delicious recipes with stories from around the world.</p>
+                    <a class="btn btn-primary mt-3" th:href="@{/recipes}" th:text="#{button.browseRecipes}">Browse Recipes</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="main-card">
+                    <h5 th:text="#{highlights.heading}">Highlights</h5>
+                    <ul>
+                        <li th:text="#{highlights.item1}">Fresh recipes added daily</li>
+                        <li th:text="#{highlights.item2}">Save favorites to your profile</li>
+                        <li th:text="#{highlights.item3}">Contribute your own recipes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.profile}">Profile</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--User profile page-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <div class="main-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 th:text="#{heading.profile}">Profile</h2>
+                <a class="btn btn-outline-secondary" th:href="@{/profile/{id}/edit(id=${user.userId})}" th:text="#{button.editProfile}">Edit Profile</a>
+            </div>
+            <p><strong th:text="#{label.username}">Username:</strong> <span th:text="${user.username}">Username</span></p>
+            <p><strong th:text="#{label.email}">Email:</strong> <span th:text="${user.email}">Email</span></p>
+
+            <hr />
+            <h4 th:text="#{heading.yourRecipes}">Your Recipes</h4>
+            <div class="list-group mb-3">
+                <div class="list-group-item" th:each="recipe : ${user.createdRecipes}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <a class="brand-link" th:href="@{/recipes/{id}(id=${recipe.recipeId})}"><strong
+                                    th:text="${recipe.title}">Recipe Title</strong></a>
+                            <div class="small-muted" th:text="${recipe.preparationTime}">Time</div>
+                        </div>
+                        <div>
+                            <a class="btn btn-sm btn-outline-secondary me-2"
+                                th:if="${currentUserId != null and user.userId == currentUserId}"
+                                th:href="@{/recipes/{id}/edit(id=${recipe.recipeId})}" th:text="#{button.edit}">Edit</a>
+                            <form th:if="${currentUserId != null and user.userId == currentUserId}"
+                                th:action="@{/recipes/{id}/delete(id=${recipe.recipeId})}" method="post"
+                                style="display:inline" th:attr="data-confirm=#{confirm.deleteRecipe}"
+                                onsubmit="return confirm(this.dataset.confirm);">
+                                <button class="btn btn-sm btn-danger" type="submit" th:text="#{button.delete}">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 th:text="#{heading.yourFavorites}">Your Favorites</h4>
+            <div class="list-group">
+                <div class="list-group-item" th:each="recipe : ${user.favorites}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <a class="brand-link" th:href="@{/recipes/{id}(id=${recipe.recipeId})}"
+                                th:text="${recipe.title}">Recipe Title</a>
+                            <div class="small-muted" th:text="${recipe.description}"></div>
+                        </div>
+                        <div>
+                            <form th:action="@{/recipes/{id}/favorite(id=${recipe.recipeId})}" method="post" th:if="${currentUserId != null and currentUserId == user.userId}">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button class="btn btn-sm btn-outline-danger" type="submit" th:text="#{button.remove}">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>

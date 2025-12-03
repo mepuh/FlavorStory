@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title.about}">About - FlavorStory</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="/css/site.css" th:href="@{/css/site.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<!--About page-->
+
+<body>
+    <div th:replace="fragments :: header"></div>
+    <main class="container my-5">
+        <div class="main-card">
+            <h1 class="mb-3" th:text="#{about.heading}">About FlavorStory</h1>
+            <p class="lead small-muted" th:text="#{about.lead}">FlavorStory is a community-driven recipe and food-story site where home cooks and culinary creators can share recipes, memories and inspiration. Our goal is to celebrate approachable cooking, honest ingredients, and the stories that make recipes meaningful.</p>
+
+            <hr />
+            <h3 th:text="#{about.mission}">Our Mission</h3>
+            <p th:text="#{about.mission.text}">We aim to create a welcoming space to share simple, reproducible recipes and the stories behind them — whether passed down through generations or discovered on a hungry afternoon.</p>
+
+            <h3 th:text="#{about.whatWeOffer}">What We Offer</h3>
+            <ul>
+                <li th:text="#{about.offer.item1}">Save and organize favorite recipes</li>
+                <li th:text="#{about.offer.item2}">Share step-by-step instructions and ingredient lists</li>
+                <li th:text="#{about.offer.item3}">Discover recipes by category</li>
+            </ul>
+
+            <h3 th:text="#{about.team}">Our Team</h3>
+            <p th:text="#{about.team.text}">FlavorStory started as a student project and is lovingly developed by food-loving engineers who believe good food should be shared. Want to get involved? Contact us.</p>
+
+            <div class="mt-4">
+                <a class="btn btn-primary" th:href="@{/contact}" th:text="#{about.cta.contact}">Contact Us</a>
+                <a class="btn btn-outline-secondary ms-2" th:href="@{/recipes}" th:text="#{about.cta.browse}">Browse Recipes</a>
+            </div>
+        </div>
+    </main>
+    <div th:replace="fragments :: footer"></div>
+</body>
+
+</html>
