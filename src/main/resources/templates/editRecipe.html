@@ -33,10 +33,20 @@
                     <textarea id="description" name="description" class="form-control" rows="3" required
                         th:text="${recipe.description}"></textarea>
                 </div>
-                <div class="mb-3">
-                    <label for="preparationTime" class="form-label" th:text="#{label.preparationTime}">Preparation Time</label>
-                    <input type="text" id="preparationTime" name="preparationTime" th:value="${recipe.preparationTime}"
-                        class="form-control" required>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="preparationTime" class="form-label" th:text="#{label.preparationTime}">Preparation Time</label>
+                        <input type="text" id="preparationTime" name="preparationTime" th:value="${recipe.preparationTime}"
+                            class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label" th:text="#{label.category}">Category</label>
+                        <select id="category" name="category.categoryId" class="form-select" required>
+                            <option th:each="category : ${categories}" th:value="${category.categoryId}"
+                                th:selected="${recipe.category != null && recipe.category.categoryId == category.categoryId}"
+                                th:text="${category.name}">Category Name</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" th:text="#{label.ingredients}">Ingredients</label>

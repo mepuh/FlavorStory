@@ -131,7 +131,25 @@ public class RecipeController {
         if (!isAdminOrRecipeOwner(id)) {
             return "redirect:/login";
         }
+        
+        // Fetch the existing recipe to preserve creator and other metadata
+        Recipe existingRecipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid recipe Id:" + id));
+        
         updatedRecipe.setRecipeId(id);
+        
+        // Preserve the creator from the existing recipe
+        updatedRecipe.setCreator(existingRecipe.getCreator());
+        
+        // Preserve the createdAt date
+        updatedRecipe.setCreatedAt(existingRecipe.getCreatedAt());
+        
+        // Resolve category to managed entity if an id was provided
+        if (updatedRecipe.getCategory() != null && updatedRecipe.getCategory().getCategoryId() != null) {
+            Long catId = updatedRecipe.getCategory().getCategoryId();
+            updatedRecipe.setCategory(categoryRepository.findById(catId).orElse(null));
+        }
+        
         // clean and set lists from multiple textarea inputs
         if (ingredients != null) {
             updatedRecipe.setIngredients(cleanList(ingredients));
